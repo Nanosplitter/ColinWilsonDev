@@ -106,7 +106,7 @@ input, select, textarea {
 		-webkit-transition: border-color 0.2s ease-in-out;
 		-ms-transition: border-color 0.2s ease-in-out;
 		transition: border-color 0.2s ease-in-out;
-		border-bottom: dotted 1px;
+		/* border-bottom: dotted 1px; */
 		color: inherit;
 		outline: 0;
 		text-decoration: none;
@@ -114,6 +114,7 @@ input, select, textarea {
 
 		a:hover {
 			border-color: transparent;
+			font-weight: bold;
 		}
 
 /* Icon */
@@ -295,7 +296,7 @@ input, select, textarea {
 
 	#bg {
 		background-size: 2250px auto;
-		width: 6750px;
+		width: 1000000px;
 	}
 
 /* Overlay */
