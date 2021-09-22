@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Colin Wilson</title>
+		<meta charset="utf-8" />
+        <script src="main.js"></script>
+        
+	</head>
+	<body>
+        <h1>Players | Ratings</h1>
+        <textarea id="players" height="800">
+
+        </textarea>
+        <textarea id="ratings" height="800">
+
+        </textarea>
+        <button onclick="matchmaking()">Make a Match</button>
+
+        <h1>Team 1:</h1>
+        <div id="team1"></div>
+        <h1>Team 2:</h1>
+        <div id="team2"></div>
+
+        <script>
+            document.getElementById("players").value = "Jack\nBenny\nAlmo\nJake\nKai\nKyle\nColin\nHollis\nBrady\nJesse\nAlex\nJordan";
+            document.getElementById("ratings").value = "520\n500\n540\n440\n540\n520\n460\n500\n480\n500\n500\n500";
+        </script>
+	</body>
+    
+</html>
