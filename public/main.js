@@ -24,11 +24,11 @@ function subset(arra, arra_size)
 }
 
 function matchmaking() {
-    console.log("HEY IM BEING CALLED");
+    // console.log("HEY IM BEING CALLED");
     var players = document.getElementById("players").value.split("\n");
     var ratings = document.getElementById("ratings").value.split("\n");
-    console.log(players);
-    console.log(ratings);
+    // console.log(players);
+    // console.log(ratings);
 
     playerRating = [];
 
@@ -70,8 +70,8 @@ function matchmaking() {
         return (a[3] - firstTeam[3]);
     });
 
-    console.log(firstTeam);
-    console.log(possibleSecondTeams);
+    // console.log(firstTeam);
+    // console.log(possibleSecondTeams);
     document.getElementById("team1").innerHTML = "";
     document.getElementById("team2").innerHTML = "";
     firstTeam.slice(0, 3).forEach(function(player) {
@@ -84,4 +84,30 @@ function matchmaking() {
         document.getElementById("team2").innerHTML += player[0] + " - " + player[1] + "<br>";
     });
     document.getElementById("team2").innerHTML += "Total team MMR: " + possibleSecondTeams[0][3];
+    return firstTeam + "," + possibleSecondTeams[0];
+}
+
+var isAlpha = function(ch){
+    return typeof ch === "string" && /[A-Za-z]/.test(ch);
+}
+
+function matchmakingTest() {
+    var total = [];
+    for (var i = 0; i < 1000; i++) {
+        total.push(matchmaking());
+    }
+    var playersList = [];
+    for (var i = 0; i < total.length; i++) {
+        var list = total[i].split(",");
+        list.forEach(function(item) {
+            // console.log(item);
+            if (isAlpha(item)) {
+                playersList.push(item);
+            }
+        });
+    }
+    var occur = playersList.reduce(function (acc, curr) {
+        return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+    }, {});
+    console.log(occur);
 }
