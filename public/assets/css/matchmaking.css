@@ -1,0 +1,11 @@
+body, textarea, button {
+    background-color: #000;
+    color: white;
+}
+h1, p, div {
+    color: #FFF;
+}
+textarea {
+    height: 300px;
+
+}

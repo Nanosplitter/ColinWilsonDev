@@ -23,7 +23,8 @@ function subset(arra, arra_size)
         return result_set; 
 }
 
-function matchmaking() {
+function matchmaking(occur) {
+    occur = occur || null;
     // console.log("HEY IM BEING CALLED");
     var players = document.getElementById("players").value.split("\n");
     var ratings = document.getElementById("ratings").value.split("\n");
@@ -66,9 +67,17 @@ function matchmaking() {
         }
     }
 
-    possibleSecondTeams.sort(function(a, b) {
-        return (a[3] - firstTeam[3]);
-    });
+    if (occur == null) {
+        possibleSecondTeams.sort(function(a, b) {
+            return (a[3] - firstTeam[3]);
+        });
+    } else {
+        possibleSecondTeams.sort(function(a, b) {
+            return adjustScore(b, firstTeam, occur) - adjustScore(a, firstTeam, occur);
+        });
+        // console.log(possibleSecondTeams);
+    }
+    
 
     // console.log(firstTeam);
     // console.log(possibleSecondTeams);
@@ -91,10 +100,15 @@ var isAlpha = function(ch){
     return typeof ch === "string" && /[A-Za-z]/.test(ch);
 }
 
-function matchmakingTest() {
+function matchmakingTest(occur) {
+    occur = occur || null;
     var total = [];
     for (var i = 0; i < 1000; i++) {
-        total.push(matchmaking());
+        if (occur == null) {
+            total.push(matchmaking());
+        } else {
+            total.push(matchmaking(occur));
+        }
     }
     var playersList = [];
     for (var i = 0; i < total.length; i++) {
@@ -109,5 +123,15 @@ function matchmakingTest() {
     var occur = playersList.reduce(function (acc, curr) {
         return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
     }, {});
-    console.log(occur);
+    // console.log(occur);
+    return occur;
+}
+
+function adjustScore(team, firstTeam, occur) {
+    var newScore = 0;
+    team.slice(0, 3).forEach(function(player) {
+        newScore += (1000 - occur[player[0]]) / 10;
+    });
+    newScore -= (Math.abs(team[3] - firstTeam[3]));
+    return newScore;
 }
