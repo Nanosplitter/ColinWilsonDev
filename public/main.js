@@ -23,6 +23,108 @@ function subset(arra, arra_size)
         return result_set; 
 }
 
+function isArrayInArray(source, search) {
+    var searchLen = search.length;
+    for (var i = 0, len = source.length; i < len; i++) {
+        // skip not same length
+        if (source[i].length != searchLen) continue;
+        // compare each element
+        for (var j = 0; j < searchLen; j++) {
+            // if a pair doesn't match skip forwards
+            if (source[i][j] !== search[j]) {
+                break;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+function findComplementTeam(group, firstTeam) {
+    var complement = []
+    // console.log(firstTeam);
+    group.forEach(function(player) {
+
+        if (!isArrayInArray(firstTeam, player)) {
+            complement.push(player);
+        }
+    });
+
+    return complement;
+}
+
+function getRandom(arr, n) {
+    var result = new Array(n),
+        len = arr.length,
+        taken = new Array(len);
+    if (n > len)
+        throw new RangeError("getRandom: more elements taken than available");
+    while (n--) {
+
+        var x = Math.floor(Math.random() * len);
+        result[n] = arr[x in taken ? taken[x] : x];
+        taken[x] = --len in taken ? taken[len] : len;
+    }
+    return result;
+}
+
+function matchmakingBalanced() {
+    var players = document.getElementById("players").value.split("\n");
+    var ratings = document.getElementById("ratings").value.split("\n");
+
+    playerRating = [];
+
+    for (var i = 0; i < players.length; i++) {
+        playerRating.push([players[i], ratings[i]]);
+    }
+
+    var group = getRandom(playerRating, 6);
+
+    var possibleFirstTeams = subset(group, 3);
+
+    var possibleMatchups = []
+    
+    possibleFirstTeams.forEach(function(team) {
+        possibleMatchups.push([team, findComplementTeam(group, team)]);
+    });
+
+    possibleMatchups.forEach(function(matchup) {
+        var team1sum = 0;
+        matchup[0].forEach(function(player) {
+            team1sum += parseInt(player[1]);
+        });
+        matchup[0].push(team1sum);
+
+        var team2sum = 0;
+        matchup[1].forEach(function(player) {
+            team2sum += parseInt(player[1]);
+        });
+        matchup[1].push(team2sum);
+
+        matchup.push(Math.abs(team1sum - team2sum));
+    });
+
+    possibleMatchups.sort(function(a, b) {
+        return a[2] - b[2];
+    });
+
+    var match = possibleMatchups[0];
+
+    document.getElementById("team1").innerHTML = "";
+    document.getElementById("team2").innerHTML = "";
+    match[0].slice(0, 3).forEach(function(player) {
+        document.getElementById("team1").innerHTML += player[0] + " - " + player[1] + "<br>";
+    });
+
+    document.getElementById("team1").innerHTML += "Total team MMR: " + match[0][3];
+
+    match[1].slice(0, 3).forEach(function(player) {
+        document.getElementById("team2").innerHTML += player[0] + " - " + player[1] + "<br>";
+    });
+    document.getElementById("team2").innerHTML += "Total team MMR: " + match[1][3];
+    return match[0] + "," + match[1];
+}
+
 function matchmaking(occur) {
     occur = occur || null;
     // console.log("HEY IM BEING CALLED");
@@ -100,21 +202,15 @@ var isAlpha = function(ch){
     return typeof ch === "string" && /[A-Za-z]/.test(ch);
 }
 
-function matchmakingTest(occur) {
-    occur = occur || null;
+function matchmakingTest() {
     var total = [];
     for (var i = 0; i < 1000; i++) {
-        if (occur == null) {
-            total.push(matchmaking());
-        } else {
-            total.push(matchmaking(occur));
-        }
+        total.push(matchmakingBalanced());
     }
     var playersList = [];
     for (var i = 0; i < total.length; i++) {
         var list = total[i].split(",");
         list.forEach(function(item) {
-            // console.log(item);
             if (isAlpha(item)) {
                 playersList.push(item);
             }
