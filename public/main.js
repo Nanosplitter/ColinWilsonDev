@@ -14,7 +14,7 @@ function subset(arra, arra_size)
             }
         }  while(i--);
 
-        if( result.length >= arra_size)
+        if( result.length == arra_size)
         {
             result_set.push(result);
         }
@@ -71,6 +71,7 @@ function getRandom(arr, n) {
 function matchmakingBalanced() {
     var players = document.getElementById("players").value.split("\n");
     var ratings = document.getElementById("ratings").value.split("\n");
+    var teamSize = parseInt(document.getElementById("teamSize").value);
 
     playerRating = [];
 
@@ -78,9 +79,9 @@ function matchmakingBalanced() {
         playerRating.push([players[i], ratings[i]]);
     }
 
-    var group = getRandom(playerRating, 6);
+    var group = getRandom(playerRating, teamSize * 2);
 
-    var possibleFirstTeams = subset(group, 3);
+    var possibleFirstTeams = subset(group, teamSize);
 
     var possibleMatchups = []
     
@@ -112,16 +113,16 @@ function matchmakingBalanced() {
 
     document.getElementById("team1").innerHTML = "";
     document.getElementById("team2").innerHTML = "";
-    match[0].slice(0, 3).forEach(function(player) {
+    match[0].slice(0, teamSize).forEach(function(player) {
         document.getElementById("team1").innerHTML += player[0] + " - " + player[1] + "<br>";
     });
 
-    document.getElementById("team1").innerHTML += "Total team MMR: " + match[0][3];
+    document.getElementById("team1").innerHTML += "Total team MMR: " + match[0].at(-1);
 
-    match[1].slice(0, 3).forEach(function(player) {
+    match[1].slice(0, teamSize).forEach(function(player) {
         document.getElementById("team2").innerHTML += player[0] + " - " + player[1] + "<br>";
     });
-    document.getElementById("team2").innerHTML += "Total team MMR: " + match[1][3];
+    document.getElementById("team2").innerHTML += "Total team MMR: " + match[1].at(-1);
     return match[0] + "," + match[1];
 }
 
